@@ -94,6 +94,22 @@ func (b Bitset) InvertRange(start, end uint) {
 	}
 }
 
+func (b Bitset) SetTo(bit uint, value bool) {
+	if value {
+		b.Set(bit)
+	} else {
+		b.Clear(bit)
+	}
+}
+
+func (b Bitset) SetRangeTo(start, end uint, value bool) {
+	if value {
+		b.SetRange(start, end)
+	} else {
+		b.ClearRange(start, end)
+	}
+}
+
 func (b Bitset) Reset() {
 	memset.Memset(b, 0)
 }
