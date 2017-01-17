@@ -366,6 +366,26 @@ func TestAny(t *testing.T) {
 	}
 }
 
+func TestClone(t *testing.T) {
+	b := Bitset(make([]byte, 10))
+
+	if !b.Equal(b.Clone()) {
+		t.Error("Clone failed")
+	}
+
+	b.Set(10)
+
+	if !b.Equal(b.Clone()) {
+		t.Error("Clone failed")
+	}
+
+	b.Clear(10)
+
+	if !b.Equal(b.Clone()) {
+		t.Error("Clone failed")
+	}
+}
+
 func BenchmarkSet(b *testing.B) {
 	bs := Bitset(make([]byte, 10))
 

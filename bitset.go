@@ -42,3 +42,7 @@ func (b Bitset) Subset(start, end uint) Bitset {
 
 	return b[start>>3 : end>>3]
 }
+
+func (b Bitset) Clone() Bitset {
+	return append([]byte(nil), b...)
+}
