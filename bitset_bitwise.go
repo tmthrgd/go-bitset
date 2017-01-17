@@ -23,18 +23,6 @@ func (b Bitset) Difference(b1, b2 Bitset) {
 	bitwise.AndNot(b, b1, b2)
 }
 
-/*func (b Bitset) XOR(b1, b2 Bitset) {
+func (b Bitset) SymmetricDifference(b1, b2 Bitset) {
 	bitwise.XOR(b, b1, b2)
 }
-
-func (b Bitset) XNOR(b1, b2 Bitset) {
-	bitwise.XNOR(b, b1, b2)
-}
-
-func (b Bitset) NotAnd(b1, b2 Bitset) {
-	bitwise.NotAnd(b, b1, b2)
-}
-
-func (b Bitset) NotOr(b1, b2 Bitset) {
-	bitwise.NotOr(b, b1, b2)
-}*/
