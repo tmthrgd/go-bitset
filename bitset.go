@@ -5,7 +5,11 @@
 
 package bitset
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/tmthrgd/go-hex"
+)
 
 var (
 	errEndLessThanStart = errors.New("cannot range backwards")
@@ -49,4 +53,14 @@ func (b Bitset) Clone() Bitset {
 
 func (b Bitset) Copy(b1 Bitset) {
 	copy(b, b1)
+}
+
+func (b Bitset) String() string {
+	const maxSize = 128
+
+	if len(b) > maxSize {
+		return "Bitset{" + hex.EncodeToString(b[:maxSize]) + "...}"
+	}
+
+	return "Bitset{" + hex.EncodeToString(b) + "}"
 }

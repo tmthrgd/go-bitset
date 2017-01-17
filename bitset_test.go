@@ -405,6 +405,39 @@ func TestCopy(t *testing.T) {
 	}
 }
 
+func TestString(t *testing.T) {
+	b := Bitset(make([]byte, 10))
+
+	if exp, got := "Bitset{00000000000000000000}", b.String(); exp != got {
+		t.Errorf("String failed, expected %s, got %s", exp, got)
+	}
+
+	b.Set(0)
+
+	if exp, got := "Bitset{01000000000000000000}", b.String(); exp != got {
+		t.Errorf("String failed, expected %s, got %s", exp, got)
+	}
+
+	b.SetRange(0, uint(b.Len()))
+
+	if exp, got := "Bitset{ffffffffffffffffffff}", b.String(); exp != got {
+		t.Errorf("String failed, expected %s, got %s", exp, got)
+	}
+
+	b.Clear(uint(b.Len())-1)
+
+	if exp, got := "Bitset{ffffffffffffffffff7f}", b.String(); exp != got {
+		t.Errorf("String failed, expected %s, got %s", exp, got)
+	}
+
+	b = Bitset(make([]byte, 256))
+
+	x := "0000000000000000000000000000000000000000000000000000000000000000"
+	if exp, got := "Bitset{" + x + x + x + x + "...}", b.String(); exp != got {
+		t.Errorf("String failed, expected %s, got %s", exp, got)
+	}
+}
+
 func BenchmarkSet(b *testing.B) {
 	bs := Bitset(make([]byte, 10))
 
