@@ -43,14 +43,14 @@ func (b Bitset) SetRange(start, end uint) {
 		panic(errOutOfRange)
 	}
 
-	for ; start&7 != 0 && start < end; start++ {
-		b[start>>3] |= 1 << (start & 7)
+	if mask := mask1(start, end); mask != 0 {
+		b[start>>3] |= mask
 	}
 
-	memset.Memset(b[start>>3:end>>3], 0xff)
+	memset.Memset(b[((start+7)&^7)>>3:end>>3], 0xff)
 
-	for start = end &^ 7; start < end; start++ {
-		b[start>>3] |= 1 << (start & 7)
+	if mask := mask2(end); mask != 0 {
+		b[(end&^7)>>3] |= mask
 	}
 }
 
@@ -63,14 +63,14 @@ func (b Bitset) ClearRange(start, end uint) {
 		panic(errOutOfRange)
 	}
 
-	for ; start&7 != 0 && start < end; start++ {
-		b[start>>3] &^= 1 << (start & 7)
+	if mask := mask1(start, end); mask != 0 {
+		b[start>>3] &^= mask
 	}
 
-	memset.Memset(b[start>>3:end>>3], 0)
+	memset.Memset(b[((start+7)&^7)>>3:end>>3], 0)
 
-	for start = end &^ 7; start < end; start++ {
-		b[start>>3] &^= 1 << (start & 7)
+	if mask := mask2(end); mask != 0 {
+		b[(end&^7)>>3] &^= mask
 	}
 }
 
@@ -83,14 +83,14 @@ func (b Bitset) InvertRange(start, end uint) {
 		panic(errOutOfRange)
 	}
 
-	for ; start&7 != 0 && start < end; start++ {
-		b[start>>3] ^= 1 << (start & 7)
+	if mask := mask1(start, end); mask != 0 {
+		b[start>>3] ^= mask
 	}
 
-	bitwise.Not(b[start>>3:end>>3], b[start>>3:end>>3])
+	bitwise.Not(b[((start+7)&^7)>>3:end>>3], b[start>>3:end>>3])
 
-	for start = end &^ 7; start < end; start++ {
-		b[start>>3] ^= 1 << (start & 7)
+	if mask := mask2(end); mask != 0 {
+		b[(end&^7)>>3] ^= mask
 	}
 }
 

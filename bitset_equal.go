@@ -20,20 +20,20 @@ func (b Bitset) EqualRange(b1 Bitset, start, end uint) bool {
 		panic(errOutOfRange)
 	}
 
-	for ; start&7 != 0 && start < end; start++ {
-		if b[start>>3]&(1<<(start&7)) != b1[start>>3]&(1<<(start&7)) {
+	if mask := mask1(start, end); mask != 0 {
+		if b[start>>3]&mask != b1[start>>3]&mask {
 			return false
 		}
 	}
 
+	start = (start + 7) &^ 7
 	if !bytes.Equal(b[start>>3:end>>3], b1[start>>3:end>>3]) {
 		return false
 	}
 
-	for start = end &^ 7; start < end; start++ {
-		if b[start>>3]&(1<<(start&7)) != b1[start>>3]&(1<<(start&7)) {
-			return false
-		}
+	if mask := mask2(end); mask != 0 {
+		end &^= 7
+		return b[end>>3]&mask == b1[end>>3]&mask
 	}
 
 	return true

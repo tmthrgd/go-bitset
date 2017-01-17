@@ -28,20 +28,18 @@ func (b Bitset) IsRangeSet(start, end uint) bool {
 		panic(errOutOfRange)
 	}
 
-	for ; start&7 != 0 && start < end; start++ {
-		if b[start>>3]&(1<<(start&7)) == 0 {
+	if mask := mask1(start, end); mask != 0 {
+		if b[start>>3]&mask != mask {
 			return false
 		}
 	}
 
-	if !bytetest.Test(b[start>>3:end>>3], 0xff) {
+	if !bytetest.Test(b[((start+7)&^7)>>3:end>>3], 0xff) {
 		return false
 	}
 
-	for start = end &^ 7; start < end; start++ {
-		if b[start>>3]&(1<<(start&7)) == 0 {
-			return false
-		}
+	if mask := mask2(end); mask != 0 {
+		return b[(end&^7)>>3]&mask == mask
 	}
 
 	return true
@@ -56,20 +54,18 @@ func (b Bitset) IsRangeClear(start, end uint) bool {
 		panic(errOutOfRange)
 	}
 
-	for ; start&7 != 0 && start < end; start++ {
-		if b[start>>3]&(1<<(start&7)) != 0 {
+	if mask := mask1(start, end); mask != 0 {
+		if b[start>>3]&mask != 0 {
 			return false
 		}
 	}
 
-	if !bytetest.Test(b[start>>3:end>>3], 0) {
+	if !bytetest.Test(b[((start+7)&^7)>>3:end>>3], 0) {
 		return false
 	}
 
-	for start = end &^ 7; start < end; start++ {
-		if b[start>>3]&(1<<(start&7)) != 0 {
-			return false
-		}
+	if mask := mask2(end); mask != 0 {
+		return b[(end&^7)>>3]&mask == 0
 	}
 
 	return true

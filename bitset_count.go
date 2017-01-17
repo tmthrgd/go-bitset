@@ -20,21 +20,15 @@ func (b Bitset) CountRange(start, end uint) uint {
 		panic(errOutOfRange)
 	}
 
-	var total uint64
+	var x uint64
 
-	for ; start&7 != 0 && start < end; start++ {
-		if b[start>>3]&(1<<(start&7)) != 0 {
-			total++
-		}
+	if mask := mask1(start, end); mask != 0 {
+		x = uint64(b[start>>3] & mask)
 	}
 
-	total += popcount.CountBytes(b[start>>3 : end>>3])
-
-	for start = end &^ 7; start < end; start++ {
-		if b[start>>3]&(1<<(start&7)) != 0 {
-			total++
-		}
+	if mask := mask2(end); mask != 0 {
+		x |= uint64(b[(end&^7)>>3] & mask) << 8
 	}
 
-	return uint(total)
+	return uint(popcount.Count64(x) + popcount.CountBytes(b[((start+7)&^7)>>3 : end>>3]))
 }
