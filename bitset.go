@@ -108,6 +108,10 @@ func (b Bitset) InvertRange(start, end uint) {
 	}
 }
 
+func (b Bitset) Reset() {
+	memset.Memset(b, 0)
+}
+
 func (b Bitset) Len() int {
 	return len(b) * 8
 }
