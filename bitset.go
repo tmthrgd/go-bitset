@@ -20,7 +20,7 @@ type Bitset []byte
 
 func New(size uint) Bitset {
 	size = (size + 7) &^ 7
-	return make([]byte, size>>3)
+	return make(Bitset, size>>3)
 }
 
 func (b Bitset) Len() uint {

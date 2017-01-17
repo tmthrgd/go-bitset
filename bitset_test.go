@@ -45,7 +45,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestLen(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	if b.Len() != 80 {
 		t.Errorf("invalid length, expected 80, got %d", b.Len())
@@ -53,7 +53,7 @@ func TestLen(t *testing.T) {
 }
 
 func TestCount(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	if b.Count() != 0 {
 		t.Errorf("invalid count, expected 0, got %d", b.Count())
@@ -83,7 +83,7 @@ func TestCount(t *testing.T) {
 }
 
 func TestCountRange(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	if c := b.CountRange(0, b.Len()); c != 0 {
 		t.Errorf("invalid count, expected 0, got %d", c)
@@ -111,7 +111,7 @@ func TestCountRange(t *testing.T) {
 }
 
 func TestSet(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	b.Set(50)
 
@@ -127,7 +127,7 @@ func TestSet(t *testing.T) {
 }
 
 func TestClear(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	for i := range b {
 		b[i] = 0xff
@@ -141,7 +141,7 @@ func TestClear(t *testing.T) {
 }
 
 func TestInvert(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	b.Invert(50)
 
@@ -157,8 +157,8 @@ func TestInvert(t *testing.T) {
 }
 
 func TestSetRange(t *testing.T) {
-	b := Bitset(make([]byte, 10))
-	b1 := Bitset(make([]byte, len(b)))
+	b := make(Bitset, 10)
+	b1 := make(Bitset, len(b))
 
 	b.SetRange(60, 70)
 
@@ -172,8 +172,8 @@ func TestSetRange(t *testing.T) {
 }
 
 func TestClearRange(t *testing.T) {
-	b := Bitset(make([]byte, 10))
-	b1 := Bitset(make([]byte, len(b)))
+	b := make(Bitset, 10)
+	b1 := make(Bitset, len(b))
 
 	for i := range b {
 		b[i] = 0xff
@@ -192,8 +192,8 @@ func TestClearRange(t *testing.T) {
 }
 
 func TestInvertRange(t *testing.T) {
-	b := Bitset(make([]byte, 10))
-	b1 := Bitset(make([]byte, len(b)))
+	b := make(Bitset, 10)
+	b1 := make(Bitset, len(b))
 
 	b.SetRange(63, 67)
 	b1.SetRange(63, 67)
@@ -210,7 +210,7 @@ func TestInvertRange(t *testing.T) {
 }
 
 func TestIsSet(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	for i := uint(0); i < b.Len(); i++ {
 		if b.IsSet(i) {
@@ -230,7 +230,7 @@ func TestIsSet(t *testing.T) {
 }
 
 func TestIsRangeSet(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	if b.IsRangeSet(0, b.Len()) {
 		t.Errorf("IsRangeSet failed, should not have found range #0-#%d", b.Len())
@@ -252,7 +252,7 @@ func TestIsRangeSet(t *testing.T) {
 }
 
 func TestIsRangeClear(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	if !b.IsRangeClear(0, b.Len()) {
 		t.Errorf("IsRangeClear, should not have found in range #0-#%d", b.Len())
@@ -274,7 +274,7 @@ func TestIsRangeClear(t *testing.T) {
 }
 
 func TestComplement(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 	b.Complement(b)
 
 	if !b.IsRangeSet(0, b.Len()) {
@@ -289,8 +289,8 @@ func TestComplement(t *testing.T) {
 }
 
 func TestEqual(t *testing.T) {
-	b := Bitset(make([]byte, 10))
-	b1 := Bitset(make([]byte, len(b)))
+	b := make(Bitset, 10)
+	b1 := make(Bitset, len(b))
 
 	if !b.Equal(b1) {
 		t.Error("Equal failed")
@@ -310,7 +310,7 @@ func TestEqual(t *testing.T) {
 }
 
 func TestAll(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	if b.All() {
 		t.Error("All failed")
@@ -338,7 +338,7 @@ func TestAll(t *testing.T) {
 }
 
 func TestNone(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	if !b.None() {
 		t.Error("None failed")
@@ -352,7 +352,7 @@ func TestNone(t *testing.T) {
 }
 
 func TestAny(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	if b.Any() {
 		t.Error("Any failed")
@@ -366,7 +366,7 @@ func TestAny(t *testing.T) {
 }
 
 func TestClone(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	if !b.Equal(b.Clone()) {
 		t.Error("Clone failed")
@@ -386,7 +386,7 @@ func TestClone(t *testing.T) {
 }
 
 func TestCopy(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 	b1 := b.Clone()
 
 	b.Set(10)
@@ -405,7 +405,7 @@ func TestCopy(t *testing.T) {
 }
 
 func TestString(t *testing.T) {
-	b := Bitset(make([]byte, 10))
+	b := make(Bitset, 10)
 
 	if exp, got := "Bitset{00000000000000000000}", b.String(); exp != got {
 		t.Errorf("String failed, expected %s, got %s", exp, got)
@@ -429,7 +429,7 @@ func TestString(t *testing.T) {
 		t.Errorf("String failed, expected %s, got %s", exp, got)
 	}
 
-	b = Bitset(make([]byte, 256))
+	b = make(Bitset, 256)
 
 	x := "0000000000000000000000000000000000000000000000000000000000000000"
 	if exp, got := "Bitset{"+x+x+x+x+"...}", b.String(); exp != got {
@@ -438,7 +438,7 @@ func TestString(t *testing.T) {
 }
 
 func BenchmarkSet(b *testing.B) {
-	bs := Bitset(make([]byte, 10))
+	bs := make(Bitset, 10)
 
 	for i := 0; i < b.N; i++ {
 		bs.Set(50)
@@ -446,7 +446,7 @@ func BenchmarkSet(b *testing.B) {
 }
 
 func BenchmarkClear(b *testing.B) {
-	bs := Bitset(make([]byte, 10))
+	bs := make(Bitset, 10)
 
 	for i := 0; i < b.N; i++ {
 		bs.Clear(50)
@@ -454,7 +454,7 @@ func BenchmarkClear(b *testing.B) {
 }
 
 func BenchmarkIsSet(b *testing.B) {
-	bs := Bitset(make([]byte, 10))
+	bs := make(Bitset, 10)
 
 	for i := 0; i < b.N; i++ {
 		var _ = bs.IsSet(50)
@@ -462,7 +462,7 @@ func BenchmarkIsSet(b *testing.B) {
 }
 
 func BenchmarkLen(b *testing.B) {
-	bs := Bitset(make([]byte, 10))
+	bs := make(Bitset, 10)
 
 	for i := 0; i < b.N; i++ {
 		var _ = bs.Len()
@@ -487,7 +487,7 @@ var sizes = []struct {
 func BenchmarkCount(b *testing.B) {
 	for _, size := range sizes {
 		b.Run(size.name, func(b *testing.B) {
-			bs := Bitset(make([]byte, size.l))
+			bs := make(Bitset, size.l)
 
 			if size.l > 1024 {
 				b.ResetTimer()
@@ -503,7 +503,7 @@ func BenchmarkCount(b *testing.B) {
 func BenchmarkCountRange(b *testing.B) {
 	for _, size := range sizes {
 		b.Run(size.name, func(b *testing.B) {
-			bs := Bitset(make([]byte, size.l))
+			bs := make(Bitset, size.l)
 			l := bs.Len()
 
 			if size.l > 1024 {
@@ -520,7 +520,7 @@ func BenchmarkCountRange(b *testing.B) {
 func BenchmarkSetRange(b *testing.B) {
 	for _, size := range sizes {
 		b.Run(size.name, func(b *testing.B) {
-			bs := Bitset(make([]byte, size.l))
+			bs := make(Bitset, size.l)
 			l := bs.Len()
 
 			if size.l > 1024 {
@@ -537,7 +537,7 @@ func BenchmarkSetRange(b *testing.B) {
 func BenchmarkClearRange(b *testing.B) {
 	for _, size := range sizes {
 		b.Run(size.name, func(b *testing.B) {
-			bs := Bitset(make([]byte, size.l))
+			bs := make(Bitset, size.l)
 			l := bs.Len()
 
 			if size.l > 1024 {
@@ -554,7 +554,7 @@ func BenchmarkClearRange(b *testing.B) {
 func BenchmarkIsRangeSet(b *testing.B) {
 	for _, size := range sizes {
 		b.Run(size.name, func(b *testing.B) {
-			bs := Bitset(make([]byte, size.l))
+			bs := make(Bitset, size.l)
 			bs.Complement(bs)
 			l := bs.Len()
 
@@ -574,7 +574,7 @@ func BenchmarkIsRangeSet(b *testing.B) {
 func BenchmarkIsRangeClear(b *testing.B) {
 	for _, size := range sizes {
 		b.Run(size.name, func(b *testing.B) {
-			bs := Bitset(make([]byte, size.l))
+			bs := make(Bitset, size.l)
 			l := bs.Len()
 
 			if size.l > 1024 {
