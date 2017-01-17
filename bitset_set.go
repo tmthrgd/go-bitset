@@ -11,7 +11,7 @@ import (
 )
 
 func (b Bitset) Set(bit uint) {
-	if bit > uint(b.Len()) {
+	if bit > b.Len() {
 		panic(errOutOfRange)
 	}
 
@@ -19,7 +19,7 @@ func (b Bitset) Set(bit uint) {
 }
 
 func (b Bitset) Clear(bit uint) {
-	if bit > uint(b.Len()) {
+	if bit > b.Len() {
 		panic(errOutOfRange)
 	}
 
@@ -27,7 +27,7 @@ func (b Bitset) Clear(bit uint) {
 }
 
 func (b Bitset) Invert(bit uint) {
-	if bit > uint(b.Len()) {
+	if bit > b.Len() {
 		panic(errOutOfRange)
 	}
 
@@ -39,7 +39,7 @@ func (b Bitset) SetRange(start, end uint) {
 		panic(errEndLessThanStart)
 	}
 
-	if end > uint(b.Len()) {
+	if end > b.Len() {
 		panic(errOutOfRange)
 	}
 
@@ -59,7 +59,7 @@ func (b Bitset) ClearRange(start, end uint) {
 		panic(errEndLessThanStart)
 	}
 
-	if end > uint(b.Len()) {
+	if end > b.Len() {
 		panic(errOutOfRange)
 	}
 
@@ -79,7 +79,7 @@ func (b Bitset) InvertRange(start, end uint) {
 		panic(errEndLessThanStart)
 	}
 
-	if end > uint(b.Len()) {
+	if end > b.Len() {
 		panic(errOutOfRange)
 	}
 

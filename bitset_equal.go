@@ -16,7 +16,7 @@ func (b Bitset) EqualRange(b1 Bitset, start, end uint) bool {
 		panic(errEndLessThanStart)
 	}
 
-	if end > uint(b.Len()) || end > uint(b1.Len()) {
+	if end > b.Len() || end > b1.Len() {
 		panic(errOutOfRange)
 	}
 

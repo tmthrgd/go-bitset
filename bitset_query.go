@@ -8,7 +8,7 @@ package bitset
 import "github.com/tmthrgd/go-byte-test"
 
 func (b Bitset) IsSet(bit uint) bool {
-	if bit > uint(b.Len()) {
+	if bit > b.Len() {
 		panic(errOutOfRange)
 	}
 
@@ -24,7 +24,7 @@ func (b Bitset) IsRangeSet(start, end uint) bool {
 		panic(errEndLessThanStart)
 	}
 
-	if end > uint(b.Len()) {
+	if end > b.Len() {
 		panic(errOutOfRange)
 	}
 
@@ -52,7 +52,7 @@ func (b Bitset) IsRangeClear(start, end uint) bool {
 		panic(errEndLessThanStart)
 	}
 
-	if end > uint(b.Len()) {
+	if end > b.Len() {
 		panic(errOutOfRange)
 	}
 

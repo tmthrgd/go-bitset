@@ -16,7 +16,7 @@ func (b Bitset) CountRange(start, end uint) uint {
 		panic(errEndLessThanStart)
 	}
 
-	if end > uint(b.Len()) {
+	if end > b.Len() {
 		panic(errOutOfRange)
 	}
 
