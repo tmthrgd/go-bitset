@@ -27,8 +27,8 @@ func (b Bitset) CountRange(start, end uint) uint {
 	}
 
 	if mask := mask2(end); mask != 0 {
-		x |= uint64(b[(end&^7)>>3] & mask) << 8
+		x |= uint64(b[(end&^7)>>3]&mask) << 8
 	}
 
-	return uint(popcount.Count64(x) + popcount.CountBytes(b[((start+7)&^7)>>3 : end>>3]))
+	return uint(popcount.Count64(x) + popcount.CountBytes(b[((start+7)&^7)>>3:end>>3]))
 }
