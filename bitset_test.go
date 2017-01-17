@@ -423,7 +423,7 @@ func TestString(t *testing.T) {
 		t.Errorf("String failed, expected %s, got %s", exp, got)
 	}
 
-	b.Clear(b.Len()-1)
+	b.Clear(b.Len() - 1)
 
 	if exp, got := "Bitset{ffffffffffffffffff7f}", b.String(); exp != got {
 		t.Errorf("String failed, expected %s, got %s", exp, got)
@@ -432,7 +432,7 @@ func TestString(t *testing.T) {
 	b = Bitset(make([]byte, 256))
 
 	x := "0000000000000000000000000000000000000000000000000000000000000000"
-	if exp, got := "Bitset{" + x + x + x + x + "...}", b.String(); exp != got {
+	if exp, got := "Bitset{"+x+x+x+x+"...}", b.String(); exp != got {
 		t.Errorf("String failed, expected %s, got %s", exp, got)
 	}
 }

@@ -71,7 +71,6 @@ func (b Bitset) ClearRange(start, end uint) {
 
 	for start = end &^ 7; start < end; start++ {
 		b[start>>3] &^= 1 << (start & 7)
-
 	}
 }
 
