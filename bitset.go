@@ -51,10 +51,6 @@ func (b Bitset) Clone() Bitset {
 	return append([]byte(nil), b...)
 }
 
-func (b Bitset) Copy(b1 Bitset) {
-	copy(b, b1)
-}
-
 func (b Bitset) String() string {
 	const maxSize = 128
 
