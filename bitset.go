@@ -24,7 +24,7 @@ func New(size uint) Bitset {
 }
 
 func (b Bitset) Len() uint {
-	return uint(len(b)) * 8
+	return uint(len(b)) << 3
 }
 
 func (b Bitset) ByteLen() int {
@@ -48,7 +48,7 @@ func (b Bitset) Subset(start, end uint) Bitset {
 }
 
 func (b Bitset) Clone() Bitset {
-	return append([]byte(nil), b...)
+	return append(Bitset(nil), b...)
 }
 
 func (b Bitset) CloneRange(start, end uint) Bitset {
