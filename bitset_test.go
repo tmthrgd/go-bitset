@@ -310,6 +310,62 @@ func TestEqual(t *testing.T) {
 	}
 }
 
+func TestAll(t *testing.T) {
+	b := Bitset(make([]byte, 10))
+
+	if b.All() {
+		t.Error("All failed")
+	}
+
+	b.Set(10)
+
+	if b.All() {
+		t.Error("All failed")
+	}
+
+	for i := range b {
+		b[i] = 0xff
+	}
+
+	if !b.All() {
+		t.Error("All failed")
+	}
+
+	b.Clear(17)
+
+	if b.All() {
+		t.Error("All failed")
+	}
+}
+
+func TestNone(t *testing.T) {
+	b := Bitset(make([]byte, 10))
+
+	if !b.None() {
+		t.Error("None failed")
+	}
+
+	b.Set(10)
+
+	if b.None() {
+		t.Error("None failed")
+	}
+}
+
+func TestAny(t *testing.T) {
+	b := Bitset(make([]byte, 10))
+
+	if b.Any() {
+		t.Error("Any failed")
+	}
+
+	b.Set(10)
+
+	if !b.Any() {
+		t.Error("Any failed")
+	}
+}
+
 func BenchmarkSet(b *testing.B) {
 	bs := Bitset(make([]byte, 10))
 

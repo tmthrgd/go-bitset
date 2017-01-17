@@ -74,3 +74,15 @@ func (b Bitset) IsRangeClear(start, end uint) bool {
 
 	return true
 }
+
+func (b Bitset) All() bool {
+	return bytetest.Test(b, 0xff)
+}
+
+func (b Bitset) None() bool {
+	return bytetest.Test(b, 0)
+}
+
+func (b Bitset) Any() bool {
+	return !b.None()
+}
