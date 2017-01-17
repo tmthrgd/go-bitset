@@ -23,8 +23,8 @@ func New(size uint) Bitset {
 	return make([]byte, size>>3)
 }
 
-func (b Bitset) Len() int {
-	return len(b) * 8
+func (b Bitset) Len() uint {
+	return uint(len(b)) * 8
 }
 
 func (b Bitset) ByteLen() int {

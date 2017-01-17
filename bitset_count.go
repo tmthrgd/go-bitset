@@ -7,11 +7,11 @@ package bitset
 
 import "github.com/tmthrgd/go-popcount"
 
-func (b Bitset) Count() int {
-	return int(popcount.CountBytes(b))
+func (b Bitset) Count() uint {
+	return uint(popcount.CountBytes(b))
 }
 
-func (b Bitset) CountRange(start, end uint) int {
+func (b Bitset) CountRange(start, end uint) uint {
 	if start > end {
 		panic(errEndLessThanStart)
 	}
@@ -36,5 +36,5 @@ func (b Bitset) CountRange(start, end uint) int {
 		}
 	}
 
-	return int(total)
+	return uint(total)
 }

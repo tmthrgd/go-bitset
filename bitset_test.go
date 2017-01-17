@@ -31,8 +31,7 @@ func isOne(b []byte) bool {
 
 func TestNew(t *testing.T) {
 	for _, v := range []struct {
-		size     uint
-		expected int
+		size, expected uint
 	}{
 		{0, 0},
 		{1, 8}, {7, 8}, {8, 8},
@@ -86,7 +85,7 @@ func TestCount(t *testing.T) {
 func TestCountRange(t *testing.T) {
 	b := Bitset(make([]byte, 10))
 
-	if c := b.CountRange(0, uint(b.Len())); c != 0 {
+	if c := b.CountRange(0, b.Len()); c != 0 {
 		t.Errorf("invalid count, expected 0, got %d", c)
 	}
 
@@ -106,7 +105,7 @@ func TestCountRange(t *testing.T) {
 		t.Errorf("invalid count, expected 50, got %d", c)
 	}
 
-	if c := b.CountRange(0, uint(b.Len())); c != b.Len() {
+	if c := b.CountRange(0, b.Len()); c != b.Len() {
 		t.Errorf("invalid count, expected %d, got %d", b.Len(), c)
 	}
 }
@@ -213,8 +212,8 @@ func TestInvertRange(t *testing.T) {
 func TestIsSet(t *testing.T) {
 	b := Bitset(make([]byte, 10))
 
-	for i := 0; i < b.Len(); i++ {
-		if b.IsSet(uint(i)) {
+	for i := uint(0); i < b.Len(); i++ {
+		if b.IsSet(i) {
 			t.Errorf("IsSet failed, should not have found bit #%d", i)
 		}
 	}
@@ -223,8 +222,8 @@ func TestIsSet(t *testing.T) {
 		b[i] = 0xff
 	}
 
-	for i := 0; i < b.Len(); i++ {
-		if !b.IsSet(uint(i)) {
+	for i := uint(0); i < b.Len(); i++ {
+		if !b.IsSet(i) {
 			t.Errorf("IsSet failed, should have found bit #%d", i)
 		}
 	}
@@ -233,7 +232,7 @@ func TestIsSet(t *testing.T) {
 func TestIsRangeSet(t *testing.T) {
 	b := Bitset(make([]byte, 10))
 
-	if b.IsRangeSet(0, uint(b.Len())) {
+	if b.IsRangeSet(0, b.Len()) {
 		t.Errorf("IsRangeSet failed, should not have found range #0-#%d", b.Len())
 	}
 
@@ -247,7 +246,7 @@ func TestIsRangeSet(t *testing.T) {
 		t.Error("IsRangeSet failed, should not have found range #40-#56")
 	}
 
-	if b.IsRangeSet(0, uint(b.Len())) {
+	if b.IsRangeSet(0, b.Len()) {
 		t.Errorf("IsRangeSet failed, should not have found range #0-#%d", b.Len())
 	}
 }
@@ -255,7 +254,7 @@ func TestIsRangeSet(t *testing.T) {
 func TestIsRangeClear(t *testing.T) {
 	b := Bitset(make([]byte, 10))
 
-	if !b.IsRangeClear(0, uint(b.Len())) {
+	if !b.IsRangeClear(0, b.Len()) {
 		t.Errorf("IsRangeClear, should not have found in range #0-#%d", b.Len())
 	}
 
@@ -269,7 +268,7 @@ func TestIsRangeClear(t *testing.T) {
 		t.Error("IsRangeClear failed, should have found in range #35-#50")
 	}
 
-	if b.IsRangeClear(0, uint(b.Len())) {
+	if b.IsRangeClear(0, b.Len()) {
 		t.Errorf("IsRangeClear failed, should have found in range #0-#%d", b.Len())
 	}
 }
@@ -278,13 +277,13 @@ func TestComplement(t *testing.T) {
 	b := Bitset(make([]byte, 10))
 	b.Complement(b)
 
-	if !b.IsRangeSet(0, uint(b.Len())) {
+	if !b.IsRangeSet(0, b.Len()) {
 		t.Errorf("Not failed, should have found range #0-#%d", b.Len())
 	}
 
 	b.Complement(b)
 
-	if !b.IsRangeClear(0, uint(b.Len())) {
+	if !b.IsRangeClear(0, b.Len()) {
 		t.Errorf("Not failed, should not have found in range #0-#%d", b.Len())
 	}
 }
@@ -418,13 +417,13 @@ func TestString(t *testing.T) {
 		t.Errorf("String failed, expected %s, got %s", exp, got)
 	}
 
-	b.SetRange(0, uint(b.Len()))
+	b.SetRange(0, b.Len())
 
 	if exp, got := "Bitset{ffffffffffffffffffff}", b.String(); exp != got {
 		t.Errorf("String failed, expected %s, got %s", exp, got)
 	}
 
-	b.Clear(uint(b.Len())-1)
+	b.Clear(b.Len()-1)
 
 	if exp, got := "Bitset{ffffffffffffffffff7f}", b.String(); exp != got {
 		t.Errorf("String failed, expected %s, got %s", exp, got)
@@ -505,7 +504,7 @@ func BenchmarkCountRange(b *testing.B) {
 	for _, size := range sizes {
 		b.Run(size.name, func(b *testing.B) {
 			bs := Bitset(make([]byte, size.l))
-			l := uint(bs.Len())
+			l := bs.Len()
 
 			if size.l > 1024 {
 				b.ResetTimer()
@@ -522,7 +521,7 @@ func BenchmarkSetRange(b *testing.B) {
 	for _, size := range sizes {
 		b.Run(size.name, func(b *testing.B) {
 			bs := Bitset(make([]byte, size.l))
-			l := uint(bs.Len())
+			l := bs.Len()
 
 			if size.l > 1024 {
 				b.ResetTimer()
@@ -539,7 +538,7 @@ func BenchmarkClearRange(b *testing.B) {
 	for _, size := range sizes {
 		b.Run(size.name, func(b *testing.B) {
 			bs := Bitset(make([]byte, size.l))
-			l := uint(bs.Len())
+			l := bs.Len()
 
 			if size.l > 1024 {
 				b.ResetTimer()
@@ -557,7 +556,7 @@ func BenchmarkIsRangeSet(b *testing.B) {
 		b.Run(size.name, func(b *testing.B) {
 			bs := Bitset(make([]byte, size.l))
 			bs.Complement(bs)
-			l := uint(bs.Len())
+			l := bs.Len()
 
 			if size.l > 1024 {
 				b.ResetTimer()
@@ -576,7 +575,7 @@ func BenchmarkIsRangeClear(b *testing.B) {
 	for _, size := range sizes {
 		b.Run(size.name, func(b *testing.B) {
 			bs := Bitset(make([]byte, size.l))
-			l := uint(bs.Len())
+			l := bs.Len()
 
 			if size.l > 1024 {
 				b.ResetTimer()
