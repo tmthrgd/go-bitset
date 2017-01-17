@@ -18,5 +18,5 @@ func mask2(end uint) byte {
 		mask |= 1 << (start & 7)
 	}*/
 
-	return (1 << (end - (end &^ 7))) - 1
+	return (1 << (end & 7)) - 1
 }
