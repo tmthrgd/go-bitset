@@ -71,6 +71,7 @@ func (b Bitset) ClearRange(start, end uint) {
 
 	for start = end &^ 7; start < end; start++ {
 		b[start>>3] &^= 1 << (start & 7)
+
 	}
 }
 
@@ -110,6 +111,10 @@ func (b Bitset) SetRangeTo(start, end uint, value bool) {
 	}
 }
 
-func (b Bitset) Reset() {
+func (b Bitset) SetAll() {
+	memset.Memset(b, 0xff)
+}
+
+func (b Bitset) ClearAll() {
 	memset.Memset(b, 0)
 }
