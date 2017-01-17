@@ -511,7 +511,7 @@ func BenchmarkCountRange(b *testing.B) {
 			}
 
 			for i := 0; i < b.N; i++ {
-				var _ = bs.CountRange(0, l)
+				var _ = bs.CountRange(1, l-1)
 			}
 		})
 	}
@@ -528,7 +528,7 @@ func BenchmarkSetRange(b *testing.B) {
 			}
 
 			for i := 0; i < b.N; i++ {
-				bs.SetRange(0, l)
+				bs.SetRange(1, l-1)
 			}
 		})
 	}
@@ -545,7 +545,7 @@ func BenchmarkClearRange(b *testing.B) {
 			}
 
 			for i := 0; i < b.N; i++ {
-				bs.ClearRange(0, l)
+				bs.ClearRange(1, l-1)
 			}
 		})
 	}
@@ -563,7 +563,7 @@ func BenchmarkIsRangeSet(b *testing.B) {
 			}
 
 			for i := 0; i < b.N; i++ {
-				if !bs.IsRangeSet(0, l) {
+				if !bs.IsRangeSet(1, l-1) {
 					b.Fatal("IsRangeSet failed")
 				}
 			}
@@ -582,7 +582,7 @@ func BenchmarkIsRangeClear(b *testing.B) {
 			}
 
 			for i := 0; i < b.N; i++ {
-				if !bs.IsRangeClear(0, l) {
+				if !bs.IsRangeClear(1, l-1) {
 					b.Fatal("IsRangeClear failed")
 				}
 			}
