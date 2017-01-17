@@ -51,6 +51,10 @@ func (b Bitset) Clone() Bitset {
 	return append([]byte(nil), b...)
 }
 
+func (b Bitset) CloneRange(start, end uint) Bitset {
+	return b.Subset(start, end).Clone()
+}
+
 func (b Bitset) String() string {
 	const maxSize = 128
 
