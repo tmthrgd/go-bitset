@@ -43,7 +43,7 @@ func TestCopyRange(t *testing.T) {
 		t.Error("Copy failed")
 	}
 
-	if !b.EqualRange(b1, 7, 64) {
+	if !b.EqualRange(b1, 7, 63) {
 		t.Error("Copy failed")
 	}
 
