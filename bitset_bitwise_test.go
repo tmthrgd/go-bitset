@@ -11,13 +11,13 @@ func TestComplement(t *testing.T) {
 	b := make(Bitset, 10)
 	b.Complement(b)
 
-	if !b.IsRangeSet(0, b.Len()) {
-		t.Errorf("Not failed, should have found range #0-#%d", b.Len())
+	if !b.All() {
+		t.Error("Complement failed, All should have returned true")
 	}
 
 	b.Complement(b)
 
-	if !b.IsRangeClear(0, b.Len()) {
-		t.Errorf("Not failed, should not have found in range #0-#%d", b.Len())
+	if !b.None() {
+		t.Error("Complement failed, None should have returned true")
 	}
 }

@@ -5,23 +5,49 @@
 
 package bitset
 
-import "testing"
+import (
+	"math/rand"
+	"testing"
+)
 
 func TestCopy(t *testing.T) {
 	b := make(Bitset, 10)
-	b1 := b.Clone()
 
-	b.Set(10)
-	b1.Copy(b)
+	b1 := b.Clone()
+	rand.Read(b1)
+
+	if b.Equal(b1) {
+		panic("Clone failed")
+	}
+
+	b.Copy(b1)
 
 	if !b.Equal(b1) {
 		t.Error("Copy failed")
 	}
+}
 
-	b.Clear(10)
-	b1.Copy(b)
+func TestCopyRange(t *testing.T) {
+	b := make(Bitset, 10)
 
-	if !b.Equal(b1) {
+	b1 := b.Clone()
+	rand.Read(b1)
+
+	if b.Equal(b1) {
+		panic("Clone failed")
+	}
+
+	b.CopyRange(b1, 7, 63)
+
+	if !b.IsRangeClear(0, 8) {
+		t.Error("Copy failed")
+	}
+
+	if !b.EqualRange(b1, 7, 64) {
+		t.Error("Copy failed")
+	}
+
+	if !b.IsRangeClear(63, b.Len()) {
 		t.Error("Copy failed")
 	}
 }
