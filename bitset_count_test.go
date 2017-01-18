@@ -26,11 +26,7 @@ func TestCount(t *testing.T) {
 		t.Errorf("invalid count, expected 2, got %d", b.Count())
 	}
 
-	b.Set(10)
-
-	for i := range b {
-		b[i] = 0xff
-	}
+	b.SetAll()
 
 	if b.Count() != b.Len() {
 		t.Errorf("invalid count, expected %d, got %d", b.Len(), b.Count())
@@ -52,9 +48,7 @@ func TestCountRange(t *testing.T) {
 		t.Errorf("invalid count, expected 2, got %d", c)
 	}
 
-	for i := range b {
-		b[i] = 0xff
-	}
+	b.SetAll()
 
 	if c := b.CountRange(10, 60); c != 50 {
 		t.Errorf("invalid count, expected 50, got %d", c)

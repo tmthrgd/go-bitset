@@ -5,40 +5,24 @@
 
 package bitset
 
-import "testing"
+import (
+	"testing"
 
-func isZero(b []byte) bool {
-	for _, v := range b {
-		if v != 0 {
-			return false
-		}
-	}
-
-	return true
-}
-
-func isOne(b []byte) bool {
-	for _, v := range b {
-		if v != 0xff {
-			return false
-		}
-	}
-
-	return true
-}
+	"github.com/tmthrgd/go-byte-test"
+)
 
 func TestSet(t *testing.T) {
 	b := make(Bitset, 10)
 
 	b.Set(50)
 
-	if !isZero(b[:6]) || b[6] != 0x04 || !isZero(b[7:]) {
+	if !bytetest.Test(b[:6], 0) || b[6] != 0x04 || !bytetest.Test(b[7:], 0) {
 		t.Error("Set failed")
 	}
 
 	b.Set(60)
 
-	if !isZero(b[:6]) || b[6] != 0x04 || b[7] != 0x10 || !isZero(b[8:]) {
+	if !bytetest.Test(b[:6], 0) || b[6] != 0x04 || b[7] != 0x10 || !bytetest.Test(b[8:], 0) {
 		t.Error("Set failed")
 	}
 }
@@ -46,13 +30,11 @@ func TestSet(t *testing.T) {
 func TestClear(t *testing.T) {
 	b := make(Bitset, 10)
 
-	for i := range b {
-		b[i] = 0xff
-	}
+	b.SetAll()
 
 	b.Clear(50)
 
-	if !isOne(b[:6]) || b[6] != 0xfb || !isOne(b[7:]) {
+	if !bytetest.Test(b[:6], 0xff) || b[6] != 0xfb || !bytetest.Test(b[7:], 0xff) {
 		t.Error("Clear failed")
 	}
 }
@@ -62,13 +44,13 @@ func TestInvert(t *testing.T) {
 
 	b.Invert(50)
 
-	if !isZero(b[:6]) || b[6] != 0x04 || !isZero(b[7:]) {
+	if !bytetest.Test(b[:6], 0) || b[6] != 0x04 || !bytetest.Test(b[7:], 0) {
 		t.Error("Invert failed")
 	}
 
 	b.Invert(50)
 
-	if !isZero(b) {
+	if !bytetest.Test(b, 0) {
 		t.Error("Invert failed")
 	}
 }
@@ -90,12 +72,9 @@ func TestSetRange(t *testing.T) {
 
 func TestClearRange(t *testing.T) {
 	b := make(Bitset, 10)
-	b1 := make(Bitset, len(b))
+	b.SetAll()
 
-	for i := range b {
-		b[i] = 0xff
-		b1[i] = 0xff
-	}
+	b1 := b.Clone()
 
 	b.ClearRange(60, 70)
 

@@ -16,9 +16,7 @@ func TestIsSet(t *testing.T) {
 		}
 	}
 
-	for i := range b {
-		b[i] = 0xff
-	}
+	b.SetAll()
 
 	for i := uint(0); i < b.Len(); i++ {
 		if !b.IsSet(i) {
@@ -84,9 +82,7 @@ func TestAll(t *testing.T) {
 		t.Error("All failed")
 	}
 
-	for i := range b {
-		b[i] = 0xff
-	}
+	b.SetAll()
 
 	if !b.All() {
 		t.Error("All failed")
@@ -139,7 +135,7 @@ func BenchmarkIsRangeSet(b *testing.B) {
 	for _, size := range benchSizes {
 		b.Run(size.name, func(b *testing.B) {
 			bs := make(Bitset, size.l)
-			bs.Complement(bs)
+			bs.SetAll()
 			l := bs.Len()
 
 			if size.l > 1024 {
