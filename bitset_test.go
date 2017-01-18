@@ -5,7 +5,10 @@
 
 package bitset
 
-import "testing"
+import (
+	"math/rand"
+	"testing"
+)
 
 var benchSizes = []struct {
 	name string
@@ -45,6 +48,31 @@ func TestLen(t *testing.T) {
 	}
 }
 
+func TestByteLen(t *testing.T) {
+	b := make(Bitset, 10)
+
+	if b.ByteLen() != 10 {
+		t.Errorf("invalid length, expected 10, got %d", b.ByteLen())
+	}
+}
+
+func TestSubset(t *testing.T) {
+	b := make(Bitset, 10)
+	rand.Read(b)
+
+	if !b.Subset(8, 64).Equal(b[1:8]) {
+		t.Error("Subset failed")
+	}
+
+	defer func() {
+		if recover() == nil {
+			t.Error("Subset did not panic for invalid range")
+		}
+	}()
+
+	b.Subset(7, 63)
+}
+
 func TestClone(t *testing.T) {
 	b := make(Bitset, 10)
 
@@ -62,6 +90,26 @@ func TestClone(t *testing.T) {
 
 	if !b.Equal(b.Clone()) {
 		t.Error("Clone failed")
+	}
+}
+
+func TestCloneRange(t *testing.T) {
+	b := make(Bitset, 10)
+
+	if !b.Subset(8, 64).Equal(b.CloneRange(8, 64)) {
+		t.Error("CloneRange failed")
+	}
+
+	b.Set(10)
+
+	if !b.Subset(8, 64).Equal(b.CloneRange(8, 64)) {
+		t.Error("CloneRange failed")
+	}
+
+	b.Clear(10)
+
+	if !b.Subset(8, 64).Equal(b.CloneRange(8, 64)) {
+		t.Error("CloneRange failed")
 	}
 }
 
@@ -103,5 +151,29 @@ func BenchmarkLen(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		var _ = bs.Len()
+	}
+}
+
+func BenchmarkByteLen(b *testing.B) {
+	bs := make(Bitset, 10)
+
+	for i := 0; i < b.N; i++ {
+		var _ = bs.ByteLen()
+	}
+}
+
+func BenchmarkSubset(b *testing.B) {
+	bs := make(Bitset, 10)
+
+	for i := 0; i < b.N; i++ {
+		var _ = bs.Subset(8, 64)
+	}
+}
+
+func BenchmarkString(b *testing.B) {
+	bs := make(Bitset, 132)
+
+	for i := 0; i < b.N; i++ {
+		var _ = bs.String()
 	}
 }
