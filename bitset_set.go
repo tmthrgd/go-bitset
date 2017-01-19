@@ -87,7 +87,8 @@ func (b Bitset) InvertRange(start, end uint) {
 		b[start>>3] ^= mask
 	}
 
-	bitwise.Not(b[((start+7)&^7)>>3:end>>3], b[start>>3:end>>3])
+	start = (start + 7) &^ 7
+	bitwise.Not(b[start>>3:end>>3], b[start>>3:end>>3])
 
 	if mask := mask2(end); mask != 0 {
 		b[(end&^7)>>3] ^= mask
