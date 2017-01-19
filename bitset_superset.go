@@ -16,5 +16,5 @@ func (b Bitset) IsSuperSet(b1 Bitset) bool {
 }
 
 func (b Bitset) IsStrictSuperSet(b1 Bitset) bool {
-	return b.Count() > b1.Count() && b.IsSuperSet(b1)
+	return b.IsSuperSet(b1) && b.Count() > b1.Count()
 }
