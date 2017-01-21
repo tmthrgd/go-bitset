@@ -106,7 +106,9 @@ func TestClone(t *testing.T) {
 }
 
 func TestCloneRange(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
+
+	b.Set(70)
 
 	if !b.Subset(8, 64).Equal(b.CloneRange(8, 64)) {
 		t.Error("CloneRange failed")
@@ -118,9 +120,17 @@ func TestCloneRange(t *testing.T) {
 		t.Error("CloneRange failed")
 	}
 
-	b.Clear(10)
+	b1 := b.CloneRange(7, 63)
 
-	if !b.Subset(8, 64).Equal(b.CloneRange(8, 64)) {
+	if !b1.IsRangeClear(0, 3) {
+		t.Error("CloneRange failed")
+	}
+
+	if !b1.IsSet(3) {
+		t.Error("CloneRange failed")
+	}
+
+	if !b1.IsRangeClear(4, b1.Len()) {
 		t.Error("CloneRange failed")
 	}
 }
