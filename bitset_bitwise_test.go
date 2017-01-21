@@ -5,7 +5,10 @@
 
 package bitset
 
-import "testing"
+import (
+	"testing"
+	"testing/quick"
+)
 
 func TestComplement(t *testing.T) {
 	b := New(80)
@@ -91,5 +94,89 @@ func TestSymmetricDifference(t *testing.T) {
 
 	if !b.IsRangeSet(60, 80) {
 		t.Error("SymmetricDifference failed")
+	}
+}
+
+func TestUnionRange(t *testing.T) {
+	if err := quick.CheckEqual(func(b, b1 Bitset, start, end uint) []byte {
+		b = b.Clone()
+
+		for i := start; i < end; i++ {
+			b.SetTo(i, b.IsSet(i) || b1.IsSet(i))
+		}
+
+		return b
+	}, func(b, b1 Bitset, start, end uint) []byte {
+		b = b.Clone()
+		b.UnionRange(b, b1, start, end)
+		return b
+	}, &quick.Config{
+		Values:        rangeTestValues2,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestIntersectionRange(t *testing.T) {
+	if err := quick.CheckEqual(func(b, b1 Bitset, start, end uint) []byte {
+		b = b.Clone()
+
+		for i := start; i < end; i++ {
+			b.SetTo(i, b.IsSet(i) && b1.IsSet(i))
+		}
+
+		return b
+	}, func(b, b1 Bitset, start, end uint) []byte {
+		b = b.Clone()
+		b.IntersectionRange(b, b1, start, end)
+		return b
+	}, &quick.Config{
+		Values:        rangeTestValues2,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestDifferenceRange(t *testing.T) {
+	if err := quick.CheckEqual(func(b, b1 Bitset, start, end uint) []byte {
+		b = b.Clone()
+
+		for i := start; i < end; i++ {
+			b.SetTo(i, b.IsSet(i) && !b1.IsSet(i))
+		}
+
+		return b
+	}, func(b, b1 Bitset, start, end uint) []byte {
+		b = b.Clone()
+		b.DifferenceRange(b, b1, start, end)
+		return b
+	}, &quick.Config{
+		Values:        rangeTestValues2,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestSymmetricDifferenceRange(t *testing.T) {
+	if err := quick.CheckEqual(func(b, b1 Bitset, start, end uint) []byte {
+		b = b.Clone()
+
+		for i := start; i < end; i++ {
+			b.SetTo(i, b.IsSet(i) != b1.IsSet(i))
+		}
+
+		return b
+	}, func(b, b1 Bitset, start, end uint) []byte {
+		b = b.Clone()
+		b.SymmetricDifferenceRange(b, b1, start, end)
+		return b
+	}, &quick.Config{
+		Values:        rangeTestValues2,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
 	}
 }

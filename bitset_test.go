@@ -37,6 +37,22 @@ func rangeTestValues(args []reflect.Value, rand *rand.Rand) {
 	args[2] = reflect.ValueOf(uint(end))
 }
 
+func rangeTestValues2(args []reflect.Value, rand *rand.Rand) {
+	size := 1 + rand.Intn(4096)
+
+	start := rand.Intn(size)
+	end := start + rand.Intn(size-start+1)
+
+	b, b1 := New(uint(size)), New(uint(size))
+	rand.Read(b)
+	rand.Read(b1)
+
+	args[0] = reflect.ValueOf(b)
+	args[1] = reflect.ValueOf(b1)
+	args[2] = reflect.ValueOf(uint(start))
+	args[3] = reflect.ValueOf(uint(end))
+}
+
 func TestNew(t *testing.T) {
 	for _, v := range []struct {
 		size, expected uint
