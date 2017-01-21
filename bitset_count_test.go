@@ -5,7 +5,10 @@
 
 package bitset
 
-import "testing"
+import (
+	"testing"
+	"testing/quick"
+)
 
 func TestCount(t *testing.T) {
 	b := New(80)
@@ -56,6 +59,23 @@ func TestCountRange(t *testing.T) {
 
 	if c := b.CountRange(0, b.Len()); c != b.Len() {
 		t.Errorf("invalid count, expected %d, got %d", b.Len(), c)
+	}
+
+	if err := quick.CheckEqual(func(b, _ Bitset, start, end uint) (count uint) {
+		for i := start; i < end; i++ {
+			if b.IsSet(i) {
+				count++
+			}
+		}
+
+		return
+	}, func(b, _ Bitset, start, end uint) uint {
+		return b.CountRange(start, end)
+	}, &quick.Config{
+		Values:        rangeTestValues2,
+		MaxCountScale: 250,
+	}); err != nil {
+		t.Error(err)
 	}
 }
 
