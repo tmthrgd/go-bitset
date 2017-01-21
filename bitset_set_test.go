@@ -121,6 +121,45 @@ func TestInvertRange(t *testing.T) {
 	}
 }
 
+func TestSetAll(t *testing.T) {
+	b := New(80)
+	b.SetAll()
+
+	if !b.All() {
+		t.Error("SetAll failed")
+	}
+}
+
+func TestClearAll(t *testing.T) {
+	b := New(80)
+	b.SetRange(20, 60)
+
+	b.ClearAll()
+
+	if !b.None() {
+		t.Error("ClearAll failed")
+	}
+}
+
+func TestInvertAll(t *testing.T) {
+	b := New(80)
+	b.SetRange(20, 60)
+
+	b.InvertAll()
+
+	if !b.IsRangeSet(0, 20) {
+		t.Error("InvertAll failed")
+	}
+
+	if !b.IsRangeClear(20, 60) {
+		t.Error("InvertAll failed")
+	}
+
+	if !b.IsRangeSet(60, 80) {
+		t.Error("InvertAll failed")
+	}
+}
+
 func BenchmarkSet(b *testing.B) {
 	bs := New(80)
 
