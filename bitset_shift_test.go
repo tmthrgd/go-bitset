@@ -5,7 +5,25 @@
 
 package bitset
 
-import "testing"
+import (
+	"math/rand"
+	"reflect"
+	"testing"
+	"testing/quick"
+)
+
+func rangeTestShiftValues(args []reflect.Value, rand *rand.Rand) {
+	size := 8 + rand.Intn(4096-8)
+	shift := 8 + rand.Intn(size>>3)<<3
+	size2 := shift + rand.Intn(4096-shift)
+
+	b := New(uint(size))
+	rand.Read(b)
+
+	args[0] = reflect.ValueOf(b)
+	args[1] = reflect.ValueOf(uint(size2))
+	args[2] = reflect.ValueOf(uint(shift))
+}
 
 func TestShiftLeft(t *testing.T) {
 	b := make(Bitset, 10)
@@ -64,6 +82,28 @@ func TestShiftLeftByZero(t *testing.T) {
 	}
 }
 
+func TestShiftLeft2(t *testing.T) {
+	useShiftFastPath = false
+	defer func() {
+		useShiftFastPath = true
+	}()
+
+	if err := quick.CheckEqual(func(b Bitset, size, shift uint) []byte {
+		b1 := New(size)
+		copy(b1, b[shift>>3:])
+		return b1
+	}, func(b Bitset, size, shift uint) []byte {
+		b1 := New(size)
+		b1.ShiftLeft(b, shift)
+		return b1
+	}, &quick.Config{
+		Values:        rangeTestShiftValues,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestShiftRight(t *testing.T) {
 	b := make(Bitset, 10)
 	b.SetRange(30, 50)
@@ -118,5 +158,27 @@ func TestShiftRightByZero(t *testing.T) {
 
 	if !b.IsRangeClear(60, b.Len()) {
 		t.Fatal("ShiftRight failed")
+	}
+}
+
+func TestShiftRight2(t *testing.T) {
+	useShiftFastPath = false
+	defer func() {
+		useShiftFastPath = true
+	}()
+
+	if err := quick.CheckEqual(func(b Bitset, size, shift uint) []byte {
+		b1 := New(size)
+		copy(b1[shift>>3:], b)
+		return b1
+	}, func(b Bitset, size, shift uint) []byte {
+		b1 := New(size)
+		b1.ShiftRight(b, shift)
+		return b1
+	}, &quick.Config{
+		Values:        rangeTestShiftValues,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
 	}
 }
