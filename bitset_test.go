@@ -53,7 +53,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestLen(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	if b.Len() != 80 {
 		t.Errorf("invalid length, expected 80, got %d", b.Len())
@@ -69,7 +69,7 @@ func TestByteLen(t *testing.T) {
 }
 
 func TestSubset(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 	rand.Read(b)
 
 	if !b.Subset(8, 64).Equal(b[1:8]) {
@@ -86,7 +86,7 @@ func TestSubset(t *testing.T) {
 }
 
 func TestClone(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	if !b.Equal(b.Clone()) {
 		t.Error("Clone failed")
@@ -136,7 +136,7 @@ func TestCloneRange(t *testing.T) {
 }
 
 func TestString(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	if exp, got := "Bitset{00000000000000000000}", b.String(); exp != got {
 		t.Errorf("String failed, expected %s, got %s", exp, got)
@@ -169,7 +169,7 @@ func TestString(t *testing.T) {
 }
 
 func BenchmarkLen(b *testing.B) {
-	bs := make(Bitset, 10)
+	bs := New(80)
 
 	for i := 0; i < b.N; i++ {
 		var _ = bs.Len()
@@ -177,7 +177,7 @@ func BenchmarkLen(b *testing.B) {
 }
 
 func BenchmarkByteLen(b *testing.B) {
-	bs := make(Bitset, 10)
+	bs := New(80)
 
 	for i := 0; i < b.N; i++ {
 		var _ = bs.ByteLen()
@@ -185,7 +185,7 @@ func BenchmarkByteLen(b *testing.B) {
 }
 
 func BenchmarkSubset(b *testing.B) {
-	bs := make(Bitset, 10)
+	bs := New(80)
 
 	for i := 0; i < b.N; i++ {
 		var _ = bs.Subset(8, 64)

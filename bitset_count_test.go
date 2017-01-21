@@ -8,7 +8,7 @@ package bitset
 import "testing"
 
 func TestCount(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	if b.Count() != 0 {
 		t.Errorf("invalid count, expected 0, got %d", b.Count())
@@ -34,7 +34,7 @@ func TestCount(t *testing.T) {
 }
 
 func TestCountRange(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	if c := b.CountRange(0, b.Len()); c != 0 {
 		t.Errorf("invalid count, expected 0, got %d", c)

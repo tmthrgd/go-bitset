@@ -13,7 +13,7 @@ import (
 )
 
 func TestSet(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	b.Set(50)
 
@@ -29,7 +29,7 @@ func TestSet(t *testing.T) {
 }
 
 func TestClear(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	b.SetAll()
 
@@ -41,7 +41,7 @@ func TestClear(t *testing.T) {
 }
 
 func TestInvert(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	b.Invert(50)
 
@@ -122,7 +122,7 @@ func TestInvertRange(t *testing.T) {
 }
 
 func BenchmarkSet(b *testing.B) {
-	bs := make(Bitset, 10)
+	bs := New(80)
 
 	for i := 0; i < b.N; i++ {
 		bs.Set(50)
@@ -130,7 +130,7 @@ func BenchmarkSet(b *testing.B) {
 }
 
 func BenchmarkClear(b *testing.B) {
-	bs := make(Bitset, 10)
+	bs := New(80)
 
 	for i := 0; i < b.N; i++ {
 		bs.Clear(50)

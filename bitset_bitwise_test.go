@@ -8,7 +8,7 @@ package bitset
 import "testing"
 
 func TestComplement(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 	b.Complement(b)
 
 	if !b.All() {

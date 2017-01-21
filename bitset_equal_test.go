@@ -8,8 +8,7 @@ package bitset
 import "testing"
 
 func TestEqual(t *testing.T) {
-	b := make(Bitset, 10)
-	b1 := make(Bitset, len(b))
+	b, b1 := New(80), New(80)
 
 	if !b.Equal(b1) {
 		t.Error("Equal failed")

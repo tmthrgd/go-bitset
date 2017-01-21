@@ -8,7 +8,7 @@ package bitset
 import "testing"
 
 func TestIsSet(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	for i := uint(0); i < b.Len(); i++ {
 		if b.IsSet(i) {
@@ -26,7 +26,7 @@ func TestIsSet(t *testing.T) {
 }
 
 func TestIsRangeSet(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	if b.IsRangeSet(0, b.Len()) {
 		t.Errorf("IsRangeSet failed, should not have found range #0-#%d", b.Len())
@@ -48,7 +48,7 @@ func TestIsRangeSet(t *testing.T) {
 }
 
 func TestIsRangeClear(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	if !b.IsRangeClear(0, b.Len()) {
 		t.Errorf("IsRangeClear, should not have found in range #0-#%d", b.Len())
@@ -70,7 +70,7 @@ func TestIsRangeClear(t *testing.T) {
 }
 
 func TestAll(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	if b.All() {
 		t.Error("All failed")
@@ -96,7 +96,7 @@ func TestAll(t *testing.T) {
 }
 
 func TestNone(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	if !b.None() {
 		t.Error("None failed")
@@ -110,7 +110,7 @@ func TestNone(t *testing.T) {
 }
 
 func TestAny(t *testing.T) {
-	b := make(Bitset, 10)
+	b := New(80)
 
 	if b.Any() {
 		t.Error("Any failed")
@@ -124,7 +124,7 @@ func TestAny(t *testing.T) {
 }
 
 func BenchmarkIsSet(b *testing.B) {
-	bs := make(Bitset, 10)
+	bs := New(80)
 
 	for i := 0; i < b.N; i++ {
 		var _ = bs.IsSet(50)
