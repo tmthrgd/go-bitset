@@ -99,6 +99,10 @@ func (b Bitset) ClearAll() {
 	memset.Memset(b, 0)
 }
 
+func (b Bitset) InvertAll() {
+	b.Complement(b)
+}
+
 func (b Bitset) SetAllTo(value bool) {
 	if value {
 		b.SetAll()
