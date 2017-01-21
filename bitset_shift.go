@@ -6,24 +6,22 @@
 package bitset
 
 func (b Bitset) ShiftLeft(b1 Bitset, shift uint) {
-	if shift > b.Len() || shift > b1.Len() {
+	if shift > b1.Len() {
 		panic(errOutOfRange)
-	}
-
-	l := b.Len()
-	if b1.Len() < l {
-		l = b1.Len()
 	}
 
 	if shift&7 == 0 { // fast path
 		copy(b, b1[shift>>3:])
 	} else { // slow path
-		for i := uint(0); i < l-shift; i++ {
+		l := b1.Len() - shift
+		if b.Len() < l {
+			l = b.Len()
+		}
+
+		for i := uint(0); i < l; i++ {
 			b.SetTo(i, b1.IsSet(i+shift))
 		}
 	}
-
-	b.ClearRange(l-shift, l)
 }
 
 func (b Bitset) ShiftRight(b1 Bitset, shift uint) {
