@@ -7,6 +7,7 @@ package bitset
 
 import (
 	"testing"
+	"testing/quick"
 
 	"github.com/tmthrgd/go-byte-test"
 )
@@ -56,52 +57,67 @@ func TestInvert(t *testing.T) {
 }
 
 func TestSetRange(t *testing.T) {
-	b := make(Bitset, 10)
-	b1 := make(Bitset, len(b))
+	if err := quick.CheckEqual(func(size, start, end uint) []byte {
+		b := New(size)
 
-	b.SetRange(60, 70)
+		for i := start; i < end; i++ {
+			b.Set(i)
+		}
 
-	for i := uint(60); i < 70; i++ {
-		b1.Set(i)
-	}
-
-	if !b.Equal(b1) {
-		t.Error("SetRange failed")
+		return b
+	}, func(size, start, end uint) []byte {
+		b := New(size)
+		b.SetRange(start, end)
+		return b
+	}, &quick.Config{
+		Values:        rangeTestValues,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
 	}
 }
 
 func TestClearRange(t *testing.T) {
-	b := make(Bitset, 10)
-	b.SetAll()
+	if err := quick.CheckEqual(func(size, start, end uint) []byte {
+		b := New(size)
+		b.SetAll()
 
-	b1 := b.Clone()
+		for i := start; i < end; i++ {
+			b.Clear(i)
+		}
 
-	b.ClearRange(60, 70)
-
-	for i := uint(60); i < 70; i++ {
-		b1.Clear(i)
-	}
-
-	if !b.Equal(b1) {
-		t.Error("ClearRange failed")
+		return b
+	}, func(size, start, end uint) []byte {
+		b := New(size)
+		b.SetAll()
+		b.ClearRange(start, end)
+		return b
+	}, &quick.Config{
+		Values:        rangeTestValues,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
 	}
 }
 
 func TestInvertRange(t *testing.T) {
-	b := make(Bitset, 10)
-	b1 := make(Bitset, len(b))
+	if err := quick.CheckEqual(func(size, start, end uint) []byte {
+		b := New(size)
 
-	b.SetRange(63, 67)
-	b1.SetRange(63, 67)
+		for i := start; i < end; i++ {
+			b.Invert(i)
+		}
 
-	b.InvertRange(60, 70)
-
-	for i := uint(60); i < 70; i++ {
-		b1.Invert(i)
-	}
-
-	if !b.Equal(b1) {
-		t.Error("InvertRange failed")
+		return b
+	}, func(size, start, end uint) []byte {
+		b := New(size)
+		b.InvertRange(start, end)
+		return b
+	}, &quick.Config{
+		Values:        rangeTestValues,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
 	}
 }
 
