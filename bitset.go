@@ -52,7 +52,9 @@ func (b Bitset) Clone() Bitset {
 }
 
 func (b Bitset) CloneRange(start, end uint) Bitset {
-	return b.Subset(start, end).Clone()
+	b1 := New(end - start)
+	b1.ShiftLeft(b, start)
+	return b1
 }
 
 func (b Bitset) String() string {
