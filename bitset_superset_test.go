@@ -20,17 +20,9 @@ func TestIsSuperSet(t *testing.T) {
 	// a and b overlap
 	// only c is (strict) super set
 
-	for i := uint(0); i < 100; i++ {
-		a.Set(i)
-	}
-
-	for i := uint(50); i < 150; i++ {
-		b.Set(i)
-	}
-
-	for i := uint(0); i < 200; i++ {
-		c.Set(i)
-	}
+	a.SetRange(0, 100)
+	b.SetRange(50, 150)
+	c.SetRange(0, 200)
 
 	if a.IsSuperSet(b) {
 		t.Errorf("IsSuperSet fails")
