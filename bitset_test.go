@@ -68,21 +68,21 @@ func TestByteLen(t *testing.T) {
 	}
 }
 
-func TestSubset(t *testing.T) {
+func TestSlice(t *testing.T) {
 	b := New(80)
 	rand.Read(b)
 
-	if !b.Subset(8, 64).Equal(b[1:8]) {
+	if !b.Slice(8, 64).Equal(b[1:8]) {
 		t.Error("Subset failed")
 	}
 
 	defer func() {
 		if recover() == nil {
-			t.Error("Subset did not panic for invalid range")
+			t.Error("Slice did not panic for invalid range")
 		}
 	}()
 
-	b.Subset(7, 63)
+	b.Slice(7, 63)
 }
 
 func TestClone(t *testing.T) {
@@ -110,13 +110,13 @@ func TestCloneRange(t *testing.T) {
 
 	b.Set(70)
 
-	if !b.Subset(8, 64).Equal(b.CloneRange(8, 64)) {
+	if !b.Slice(8, 64).Equal(b.CloneRange(8, 64)) {
 		t.Error("CloneRange failed")
 	}
 
 	b.Set(10)
 
-	if !b.Subset(8, 64).Equal(b.CloneRange(8, 64)) {
+	if !b.Slice(8, 64).Equal(b.CloneRange(8, 64)) {
 		t.Error("CloneRange failed")
 	}
 
@@ -184,11 +184,11 @@ func BenchmarkByteLen(b *testing.B) {
 	}
 }
 
-func BenchmarkSubset(b *testing.B) {
+func BenchmarkSlice(b *testing.B) {
 	bs := New(80)
 
 	for i := 0; i < b.N; i++ {
-		var _ = bs.Subset(8, 64)
+		var _ = bs.Slice(8, 64)
 	}
 }
 

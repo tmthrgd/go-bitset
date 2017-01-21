@@ -31,7 +31,7 @@ func (b Bitset) ByteLen() int {
 	return len(b)
 }
 
-func (b Bitset) Subset(start, end uint) Bitset {
+func (b Bitset) Slice(start, end uint) Bitset {
 	if start > end {
 		panic(errEndLessThanStart)
 	}
@@ -41,7 +41,7 @@ func (b Bitset) Subset(start, end uint) Bitset {
 	}
 
 	if start&7 != 0 || end&7 != 0 {
-		panic(errors.New("cannot take subset accross byte boundary"))
+		panic(errors.New("cannot slice inside a byte"))
 	}
 
 	return b[start>>3 : end>>3]
