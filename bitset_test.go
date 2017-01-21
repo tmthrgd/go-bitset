@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"reflect"
 	"testing"
+	"testing/quick"
 )
 
 var benchSizes = []struct {
@@ -122,32 +123,21 @@ func TestClone(t *testing.T) {
 }
 
 func TestCloneRange(t *testing.T) {
-	b := New(80)
+	if err := quick.CheckEqual(func(b, _ Bitset, start, end uint) []byte {
+		b1 := New(end - start)
 
-	b.Set(70)
+		for i := start; i < end; i++ {
+			b1.SetTo(i-start, b.IsSet(i))
+		}
 
-	if !b.Slice(8, 64).Equal(b.CloneRange(8, 64)) {
-		t.Error("CloneRange failed")
-	}
-
-	b.Set(10)
-
-	if !b.Slice(8, 64).Equal(b.CloneRange(8, 64)) {
-		t.Error("CloneRange failed")
-	}
-
-	b1 := b.CloneRange(7, 63)
-
-	if !b1.IsRangeClear(0, 3) {
-		t.Error("CloneRange failed")
-	}
-
-	if !b1.IsSet(3) {
-		t.Error("CloneRange failed")
-	}
-
-	if !b1.IsRangeClear(4, b1.Len()) {
-		t.Error("CloneRange failed")
+		return b1
+	}, func(b, _ Bitset, start, end uint) []byte {
+		return b.CloneRange(start, end)
+	}, &quick.Config{
+		Values:        rangeTestValues2,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
 	}
 }
 
