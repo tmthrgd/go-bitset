@@ -170,3 +170,20 @@ func BenchmarkClearRange(b *testing.B) {
 		})
 	}
 }
+
+func BenchmarkInvertRange(b *testing.B) {
+	for _, size := range benchSizes {
+		b.Run(size.name, func(b *testing.B) {
+			bs := make(Bitset, size.l)
+			l := bs.Len()
+
+			if size.l > 1024 {
+				b.ResetTimer()
+			}
+
+			for i := 0; i < b.N; i++ {
+				bs.InvertRange(1, l-1)
+			}
+		})
+	}
+}
