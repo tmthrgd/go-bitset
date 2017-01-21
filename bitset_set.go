@@ -44,10 +44,12 @@ func (b Bitset) SetRange(start, end uint) {
 		b[start>>3] |= mask
 	}
 
-	memset.Memset(b[((start+7)&^7)>>3:end>>3], 0xff)
+	if start := (start + 7) &^ 7; start < end {
+		memset.Memset(b[start>>3:end>>3], 0xff)
+	}
 
-	if mask := mask2(end); mask != 0 {
-		b[(end&^7)>>3] |= mask
+	if mask := mask2(start, end); mask != 0 {
+		b[end>>3] |= mask
 	}
 }
 
@@ -64,10 +66,12 @@ func (b Bitset) ClearRange(start, end uint) {
 		b[start>>3] &^= mask
 	}
 
-	memset.Memset(b[((start+7)&^7)>>3:end>>3], 0)
+	if start := (start + 7) &^ 7; start < end {
+		memset.Memset(b[start>>3:end>>3], 0)
+	}
 
-	if mask := mask2(end); mask != 0 {
-		b[(end&^7)>>3] &^= mask
+	if mask := mask2(start, end); mask != 0 {
+		b[end>>3] &^= mask
 	}
 }
 

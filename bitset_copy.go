@@ -22,11 +22,11 @@ func (b Bitset) CopyRange(b1 Bitset, start, end uint) {
 		b[start>>3] = b[start>>3]&^mask | b1[start>>3]&mask
 	}
 
-	start = (start + 7) &^ 7
-	copy(b[start>>3:end>>3], b1[start>>3:end>>3])
+	if start := (start + 7) &^ 7; start < end {
+		copy(b[start>>3:end>>3], b1[start>>3:end>>3])
+	}
 
-	if mask := mask2(end); mask != 0 {
-		end &^= 7
+	if mask := mask2(start, end); mask != 0 {
 		b[end>>3] = b[end>>3]&^mask | b1[end>>3]&mask
 	}
 }

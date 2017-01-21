@@ -26,13 +26,13 @@ func (b Bitset) EqualRange(b1 Bitset, start, end uint) bool {
 		}
 	}
 
-	start = (start + 7) &^ 7
-	if !bytes.Equal(b[start>>3:end>>3], b1[start>>3:end>>3]) {
-		return false
+	if start := (start + 7) &^ 7; start < end {
+		if !bytes.Equal(b[start>>3:end>>3], b1[start>>3:end>>3]) {
+			return false
+		}
 	}
 
-	if mask := mask2(end); mask != 0 {
-		end &^= 7
+	if mask := mask2(start, end); mask != 0 {
 		return b[end>>3]&mask == b1[end>>3]&mask
 	}
 

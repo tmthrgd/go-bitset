@@ -7,6 +7,7 @@ package bitset
 
 import (
 	"math/rand"
+	"reflect"
 	"testing"
 )
 
@@ -23,6 +24,17 @@ var benchSizes = []struct {
 	{"1M", 1024 * 1024},
 	{"16M", 16 * 1024 * 1024},
 	{"128M", 128 * 1024 * 1024},
+}
+
+func rangeTestValues(args []reflect.Value, rand *rand.Rand) {
+	size := 1 + rand.Intn(4096)
+
+	start := rand.Intn(size)
+	end := start + rand.Intn(size-start+1)
+
+	args[0] = reflect.ValueOf(uint(size))
+	args[1] = reflect.ValueOf(uint(start))
+	args[2] = reflect.ValueOf(uint(end))
 }
 
 func TestNew(t *testing.T) {

@@ -20,7 +20,11 @@ func testMask1(start, end uint) (mask byte) {
 	return
 }
 
-func testMask2(end uint) (mask byte) {
+func testMask2(start, end uint) (mask byte) {
+	if start > end&^7 {
+		return 0
+	}
+
 	for start := end &^ 7; start < end; start++ {
 		mask |= 1 << (start & 7)
 	}
@@ -28,16 +32,25 @@ func testMask2(end uint) (mask byte) {
 	return
 }
 
+func maskTestValues(args []reflect.Value, rand *rand.Rand) {
+	start := uint(rand.Int())
+	end := start + uint(rand.Intn(int(^uint(0)>>1)-int(start)))
+
+	args[0] = reflect.ValueOf(start)
+	args[1] = reflect.ValueOf(end)
+}
+
 func TestMask1(t *testing.T) {
+	for i := uint(0); i < 0x2000; i++ {
+		for j := i; j < 0x2000; j++ {
+			if x, y := testMask1(i, j), mask1(i, j); x != y {
+				t.Fatalf("testMask1(%[1]d, %[2]d) = 0x%02x != 0x%02x = mask1(%[1]d, %[2]d)", i, j, x, y)
+			}
+		}
+	}
+
 	if err := quick.CheckEqual(testMask1, mask1, &quick.Config{
-		Values: func(args []reflect.Value, rand *rand.Rand) {
-			start := uint(rand.Int())
-			end := start + uint(rand.Intn(int(^uint(0)>>1)-int(start)))
-
-			args[0] = reflect.ValueOf(start)
-			args[1] = reflect.ValueOf(end)
-		},
-
+		Values:        maskTestValues,
 		MaxCountScale: 500,
 	}); err != nil {
 		t.Error(err)
@@ -45,7 +58,16 @@ func TestMask1(t *testing.T) {
 }
 
 func TestMask2(t *testing.T) {
+	for i := uint(0); i < 0x2000; i++ {
+		for j := i; j < 0x2000; j++ {
+			if x, y := testMask2(i, j), mask2(i, j); x != y {
+				t.Fatalf("testMask2(%[1]d, %[2]d) = 0x%02x != 0x%02x = mask2(%[1]d, %[2]d)", i, j, x, y)
+			}
+		}
+	}
+
 	if err := quick.CheckEqual(testMask2, mask2, &quick.Config{
+		Values:        maskTestValues,
 		MaxCountScale: 500,
 	}); err != nil {
 		t.Error(err)
