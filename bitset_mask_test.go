@@ -73,3 +73,23 @@ func TestMask2(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func BenchmarkMask1(b *testing.B) {
+	start := uint(rand.Int())
+	end := start + uint(rand.Intn(int(^uint(0)>>1)-int(start)))
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		var _ = mask1(start, end)
+	}
+}
+
+func BenchmarkMask2(b *testing.B) {
+	start := uint(rand.Int())
+	end := start + uint(rand.Intn(int(^uint(0)>>1)-int(start)))
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		var _ = mask2(start, end)
+	}
+}
