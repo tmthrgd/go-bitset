@@ -25,6 +25,24 @@ func TestIsSet(t *testing.T) {
 	}
 }
 
+func TestIsClear(t *testing.T) {
+	b := New(80)
+
+	for i := uint(0); i < b.Len(); i++ {
+		if !b.IsClear(i) {
+			t.Errorf("IsClear failed, should not have found bit #%d", i)
+		}
+	}
+
+	b.SetAll()
+
+	for i := uint(0); i < b.Len(); i++ {
+		if b.IsClear(i) {
+			t.Errorf("IsClear failed, should have found bit #%d", i)
+		}
+	}
+}
+
 func TestIsRangeSet(t *testing.T) {
 	b := New(80)
 
