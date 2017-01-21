@@ -54,6 +54,7 @@ func (b Bitset) Clone() Bitset {
 func (b Bitset) CloneRange(start, end uint) Bitset {
 	b1 := New(end - start)
 	b1.ShiftLeft(b, start)
+	b1.ClearRange(end-start, b1.Len())
 	return b1
 }
 
