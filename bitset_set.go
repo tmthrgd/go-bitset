@@ -5,10 +5,7 @@
 
 package bitset
 
-import (
-	"github.com/tmthrgd/go-bitwise"
-	"github.com/tmthrgd/go-memset"
-)
+import "github.com/tmthrgd/go-memset"
 
 func (b Bitset) Set(bit uint) {
 	if bit > b.Len() {
@@ -75,24 +72,7 @@ func (b Bitset) ClearRange(start, end uint) {
 }
 
 func (b Bitset) InvertRange(start, end uint) {
-	if start > end {
-		panic(errEndLessThanStart)
-	}
-
-	if end > b.Len() {
-		panic(errOutOfRange)
-	}
-
-	if mask := mask1(start, end); mask != 0 {
-		b[start>>3] ^= mask
-	}
-
-	start = (start + 7) &^ 7
-	bitwise.Not(b[start>>3:end>>3], b[start>>3:end>>3])
-
-	if mask := mask2(end); mask != 0 {
-		b[(end&^7)>>3] ^= mask
-	}
+	b.ComplementRange(b, start, end)
 }
 
 func (b Bitset) SetTo(bit uint, value bool) {
