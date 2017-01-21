@@ -5,7 +5,10 @@
 
 package bitset
 
-import "testing"
+import (
+	"testing"
+	"testing/quick"
+)
 
 func TestCopy(t *testing.T) {
 	b, b1 := New(80), New(80)
@@ -19,20 +22,22 @@ func TestCopy(t *testing.T) {
 }
 
 func TestCopyRange(t *testing.T) {
-	b, b1 := New(80), New(80)
-	b1.SetAll()
+	if err := quick.CheckEqual(func(b, b1 Bitset, start, end uint) []byte {
+		b = b.Clone()
 
-	b.CopyRange(b1, 7, 63)
+		for i := start; i < end; i++ {
+			b.SetTo(i, b1.IsSet(i))
+		}
 
-	if !b.IsRangeClear(0, 7) {
-		t.Error("CopyRange failed")
-	}
-
-	if !b.IsRangeSet(7, 63) {
-		t.Error("CopyRange failed")
-	}
-
-	if !b.IsRangeClear(63, b.Len()) {
-		t.Error("CopyRange failed")
+		return b
+	}, func(b, b1 Bitset, start, end uint) []byte {
+		b = b.Clone()
+		b.CopyRange(b1, start, end)
+		return b
+	}, &quick.Config{
+		Values:        rangeTestValues2,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
 	}
 }
