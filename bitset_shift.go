@@ -36,7 +36,7 @@ func (b Bitset) ShiftRight(b1 Bitset, shift uint) {
 	} else { // slow path
 		l := b.Len()
 		if b1.Len() < l-shift {
-			l = b1.Len()
+			l = b1.Len() + shift
 		}
 
 		for i := l - 1; i >= shift; i-- {
