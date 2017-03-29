@@ -7,7 +7,7 @@ package bitset
 
 import "testing"
 
-func TestIsSet(t *testing.T) {
+func TestAtomicIsSet(t *testing.T) {
 	b := NewAtomic(192)
 
 	for i := uint(0); i < b.Len(); i++ {
@@ -27,7 +27,7 @@ func TestIsSet(t *testing.T) {
 	}
 }
 
-func TestIsClear(t *testing.T) {
+func TestAtomicIsClear(t *testing.T) {
 	b := NewAtomic(192)
 
 	for i := uint(0); i < b.Len(); i++ {
@@ -47,7 +47,7 @@ func TestIsClear(t *testing.T) {
 	}
 }
 
-func BenchmarkIsSet(b *testing.B) {
+func BenchmarkAtomicIsSet(b *testing.B) {
 	bs := NewAtomic(192)
 
 	for i := 0; i < b.N; i++ {

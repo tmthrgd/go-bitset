@@ -12,11 +12,6 @@ import (
 	"github.com/tmthrgd/atomics"
 )
 
-var (
-	errEndLessThanStart = errors.New("cannot range backwards")
-	errOutOfRange       = errors.New("out of range")
-)
-
 type Atomic []atomics.Uint64
 
 func NewAtomic(size uint) Atomic {

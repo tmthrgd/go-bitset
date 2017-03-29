@@ -7,7 +7,7 @@ package bitset
 
 import "testing"
 
-func TestNew(t *testing.T) {
+func TestNewAtomic(t *testing.T) {
 	for _, v := range []struct {
 		size, expected uint
 	}{
@@ -21,7 +21,7 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func TestLen(t *testing.T) {
+func TestAtomicLen(t *testing.T) {
 	b := NewAtomic(192)
 
 	if b.Len() != 192 {
@@ -29,7 +29,7 @@ func TestLen(t *testing.T) {
 	}
 }
 
-func TestUint64Len(t *testing.T) {
+func TestAtomicUint64Len(t *testing.T) {
 	b := make(Atomic, 10)
 
 	if b.Uint64Len() != 10 {
@@ -37,7 +37,7 @@ func TestUint64Len(t *testing.T) {
 	}
 }
 
-func TestSlice(t *testing.T) {
+func TestAtomicSlice(t *testing.T) {
 	b := NewAtomic(192)
 
 	defer func() {
@@ -49,7 +49,7 @@ func TestSlice(t *testing.T) {
 	b.Slice(63, 127)
 }
 
-func BenchmarkLen(b *testing.B) {
+func BenchmarkAtomicLen(b *testing.B) {
 	bs := NewAtomic(192)
 
 	for i := 0; i < b.N; i++ {
@@ -57,7 +57,7 @@ func BenchmarkLen(b *testing.B) {
 	}
 }
 
-func BenchmarkUint64Len(b *testing.B) {
+func BenchmarkAtomicUint64Len(b *testing.B) {
 	bs := NewAtomic(192)
 
 	for i := 0; i < b.N; i++ {
@@ -65,7 +65,7 @@ func BenchmarkUint64Len(b *testing.B) {
 	}
 }
 
-func BenchmarkSlice(b *testing.B) {
+func BenchmarkAtomicSlice(b *testing.B) {
 	bs := NewAtomic(192)
 
 	for i := 0; i < b.N; i++ {
@@ -73,7 +73,7 @@ func BenchmarkSlice(b *testing.B) {
 	}
 }
 
-func BenchmarkString(b *testing.B) {
+func BenchmarkAtomicString(b *testing.B) {
 	var bs Atomic
 
 	for i := 0; i < b.N; i++ {
