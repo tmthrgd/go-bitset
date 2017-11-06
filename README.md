@@ -6,7 +6,7 @@
 ## Download
 
 ```
-go get github.com/tmthrgd/bitset
+go get github.com/tmthrgd/go-bitset
 ```
 
 ## Benchmark
