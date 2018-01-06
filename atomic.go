@@ -37,7 +37,7 @@ func (a Atomic) Slice(start, end uint) Atomic {
 	}
 
 	if start&63 != 0 || end&63 != 0 {
-		panic(errors.New("cannot slice inside a uint64"))
+		panic(errors.New("go-bitset: cannot slice inside a uint64"))
 	}
 
 	return a[start/64 : end/64]

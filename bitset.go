@@ -12,8 +12,8 @@ import (
 )
 
 var (
-	errEndLessThanStart = errors.New("cannot range backwards")
-	errOutOfRange       = errors.New("out of range")
+	errEndLessThanStart = errors.New("go-bitset: cannot range backwards")
+	errOutOfRange       = errors.New("go-bitset: out of range")
 )
 
 type Bitset []byte
@@ -41,7 +41,7 @@ func (b Bitset) Slice(start, end uint) Bitset {
 	}
 
 	if start&7 != 0 || end&7 != 0 {
-		panic(errors.New("cannot slice inside a byte"))
+		panic(errors.New("go-bitset: cannot slice inside a byte"))
 	}
 
 	return b[start>>3 : end>>3]
