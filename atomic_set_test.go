@@ -7,6 +7,7 @@ package bitset
 
 import (
 	"testing"
+	"testing/quick"
 )
 
 func TestAtomicSet(t *testing.T) {
@@ -56,6 +57,71 @@ func TestAtomicInvert(t *testing.T) {
 	}
 }
 
+func TestAtomicSetRange(t *testing.T) {
+	if err := quick.Check(func(size, start, end uint) bool {
+		a := NewAtomic(size)
+		a.SetRange(start, end)
+
+		for i := uint(0); i < start; i++ {
+			if a.IsSet(i) {
+				return false
+			}
+		}
+
+		for i := start; i < end; i++ {
+			if !a.IsSet(i) {
+				return false
+			}
+		}
+
+		for i := end; i < size; i++ {
+			if a.IsSet(i) {
+				return false
+			}
+		}
+
+		return true
+	}, &quick.Config{
+		Values:        rangeTestValues,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestAtomicClearRange(t *testing.T) {
+	if err := quick.Check(func(size, start, end uint) bool {
+		a := NewAtomic(size)
+		a.SetRange(0, size)
+		a.ClearRange(start, end)
+
+		for i := uint(0); i < start; i++ {
+			if !a.IsSet(i) {
+				return false
+			}
+		}
+
+		for i := start; i < end; i++ {
+			if a.IsSet(i) {
+				return false
+			}
+		}
+
+		for i := end; i < size; i++ {
+			if !a.IsSet(i) {
+				return false
+			}
+		}
+
+		return true
+	}, &quick.Config{
+		Values:        rangeTestValues,
+		MaxCountScale: 100,
+	}); err != nil {
+		t.Error(err)
+	}
+}
+
 func BenchmarkAtomicSet(b *testing.B) {
 	bs := NewAtomic(192)
 
@@ -69,5 +135,39 @@ func BenchmarkAtomicClear(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		bs.Clear(50)
+	}
+}
+
+func BenchmarkAtomicSetRange(b *testing.B) {
+	for _, size := range benchSizes {
+		b.Run(size.name, func(b *testing.B) {
+			bs := NewAtomic(uint(size.l) * 8)
+			l := bs.Len()
+
+			if size.l > 1024 {
+				b.ResetTimer()
+			}
+
+			for i := 0; i < b.N; i++ {
+				bs.SetRange(1, l-1)
+			}
+		})
+	}
+}
+
+func BenchmarkAtomicClearRange(b *testing.B) {
+	for _, size := range benchSizes {
+		b.Run(size.name, func(b *testing.B) {
+			bs := NewAtomic(uint(size.l) * 8)
+			l := bs.Len()
+
+			if size.l > 1024 {
+				b.ResetTimer()
+			}
+
+			for i := 0; i < b.N; i++ {
+				bs.ClearRange(1, l-1)
+			}
+		})
 	}
 }

@@ -6,7 +6,8 @@
 package bitset
 
 func mask1(start, end uint) byte {
-	return ((0xff << (start & 7)) ^ (0xff << (end - start&^7))) & ((1 >> (start & 7)) - 1)
+	const max = ^byte(0)
+	return ((max << (start & 7)) ^ (max << (end - start&^7))) & ((1 >> (start & 7)) - 1)
 }
 
 func mask2(start, end uint) byte {
