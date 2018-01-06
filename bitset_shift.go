@@ -12,9 +12,11 @@ func (b Bitset) ShiftLeft(b1 Bitset, shift uint) {
 		panic(errOutOfRange)
 	}
 
-	if shift&7 == 0 && useShiftFastPath { // fast path
+	if shift&7 == 0 && useShiftFastPath {
+		// fast path
 		copy(b, b1[shift>>3:])
-	} else { // slow path
+	} else {
+		// slow path
 		l := b1.Len() - shift
 		if b.Len() < l {
 			l = b.Len()
@@ -31,9 +33,11 @@ func (b Bitset) ShiftRight(b1 Bitset, shift uint) {
 		panic(errOutOfRange)
 	}
 
-	if shift&7 == 0 && useShiftFastPath { // fast path
+	if shift&7 == 0 && useShiftFastPath {
+		// fast path
 		copy(b[shift>>3:], b1)
-	} else { // slow path
+	} else {
+		// slow path
 		l := b.Len()
 		if b1.Len() < l-shift {
 			l = b1.Len() + shift
