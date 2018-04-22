@@ -22,8 +22,6 @@ func AndEq(a, b []byte) bool {
 	return andeqASM(&a[0], &b[0], uint64(n))
 }
 
-//go:generate go run asm_gen.go
-
 // This function is implemented in bitwise_andeq_amd64.s
 //go:noescape
 func andeqASM(a, b *byte, len uint64) (ret bool)
