@@ -5,7 +5,11 @@
 
 package bitset
 
-import "github.com/tmthrgd/go-popcount"
+import (
+	"math/bits"
+
+	"github.com/tmthrgd/go-popcount"
+)
 
 func (b Bitset) Count() uint {
 	return uint(popcount.CountBytes(b))
@@ -20,10 +24,13 @@ func (b Bitset) CountRange(start, end uint) uint {
 		panic(errOutOfRange)
 	}
 
-	var x, total uint64
+	var (
+		total uint64
+		x     uint16
+	)
 
 	if mask := mask1(start, end); mask != 0 {
-		x = uint64(b[start>>3] & mask)
+		x = uint16(b[start>>3] & mask)
 	}
 
 	if start := (start + 7) &^ 7; start < end {
@@ -31,8 +38,8 @@ func (b Bitset) CountRange(start, end uint) uint {
 	}
 
 	if mask := mask2(start, end); mask != 0 {
-		x |= uint64(b[end>>3]&mask) << 8
+		x |= uint16(b[end>>3]&mask) << 8
 	}
 
-	return uint(popcount.Count64(x) + total)
+	return uint(uint64(bits.OnesCount16(x)) + total)
 }
