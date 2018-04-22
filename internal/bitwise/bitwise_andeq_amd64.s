@@ -20,8 +20,7 @@ bigloop:
 	MOVOU -16(DI)(BX*1), X1
 	PAND X1, X0
 	PXOR X1, X0
-	// PTEST X0, X0
-	BYTE $0x66; BYTE $0x0f; BYTE $0x38; BYTE $0x17; BYTE $0xc0
+	PTEST X0, X0
 	JNZ ret_false
 	SUBQ $16, BX
 	JZ ret_true
